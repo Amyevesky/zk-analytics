@@ -1,0 +1,15 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model dailyStats {
+  id        Int      @id @default(autoincrement())
+  date      DateTime @unique
+  txCount   Int
+  createdAt DateTime @default(now())
+}

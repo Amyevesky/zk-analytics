@@ -1,0 +1,41 @@
+services:
+  # NestJS API service
+  zk-analytics:
+    container_name: zk-analytics
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=mysql://root:password@mysql:3306/zk_analytics
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  # MySQL service
+  mysql:
+    image: mysql:8
+    container_name: zk-analytics-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: 099009
+      MYSQL_DATABASE: zk_analytics
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+# Volumes for persistent DB storage
+volumes:
+  mysql_data:
+
+# Shared network
+networks:
+  app-network:
+    driver: bridge
