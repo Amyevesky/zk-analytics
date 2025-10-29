@@ -93,7 +93,7 @@ export class TxService {
                 create: { date: today, txCount: totalTxs },
             });
 
-            await this.redisService.set(todayKey, totalTxs.toString(), { EX: 86400 }); // Optionally add { EX: 86400 } to expire after 1 day
+            await this.redisService.set(todayKey, totalTxs.toString(), { EX: 1800 }); // Optionally add { EX: 86400 } to expire after 1 day
 
             this.analyticsGateway.emitTxCountUpdated(totalTxs);
 
@@ -103,7 +103,7 @@ export class TxService {
             return 0;
         }
     }
-
+    //docker exec -it zk-analytics-app npx prisma db push
 
     async getInternalTransactionCountLast24h(): Promise<number> {
         const now = Math.floor(Date.now() / 1000);

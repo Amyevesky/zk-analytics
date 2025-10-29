@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE `dailystats` DROP COLUMN `avgBlockTime`;
+ALTER TABLE `dailyStats` DROP COLUMN `avgBlockTime`;

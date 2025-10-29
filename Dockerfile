@@ -1,23 +1,20 @@
-# Stage 1: Build
-FROM node:18 AS builder
+FROM node:20-alpine
 
 WORKDIR /app
 
+# Install dependencies
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
+# Copy Prisma schema before running generate
+COPY prisma ./prisma
+RUN npx prisma generate
+
+# Copy rest of the code
 COPY . .
+
+# Build the app
 RUN npm run build
 
-# Stage 2: Production run
-FROM node:18-slim
-
-WORKDIR /app
-
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
-
-EXPOSE 3000
-
-CMD ["node", "--enable-source-maps", "--es-module-specifier-resolution=node", "dist/main.js"]
+# Start the app
+CMD ["node", "dist/main.js"]

@@ -8,7 +8,7 @@ export class RedisService implements OnModuleDestroy {
 
     constructor() {
         this.client = new Redis({
-            host: 'localhost',
+            host: 'redis',
             port: 6379,
         });
         console.log('Re-dis service initialized');
